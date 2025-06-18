@@ -1,8 +1,18 @@
 import React from 'react'
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import SignUp from './pages/SignUp/SignUp'
+import SignIn from './pages/SignIn/SignIn'
+import { ImageUploader } from './components/misc/ImageUploader'
 
 const App = () => {
   return (
-    <div className='bg-red-400'>App</div>
+    <BrowserRouter>
+      <Routes>
+        <Route path='/signup' element={<SignUp/>}/>
+        <Route path='/signin' element={<SignIn/>}/>
+        <Route path='/upload' element={<ImageUploader/>}/>
+      </Routes>
+    </BrowserRouter>
   )
 }
 
