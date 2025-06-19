@@ -7,7 +7,7 @@ import { toast } from "react-toastify";
  * @param {string} noteId - The unique ID of the note to delete.
  * @returns {Promise<void>} - A promise that resolves when the note is deleted.
  */
-export const deleteNote = async (noteId) => {
+export const DeleteNote = async (noteId) => {
   const noteRef = ref(db, `notes/${auth.currentUser.uid}/${noteId}`);
   try {
     await remove(noteRef);
@@ -23,7 +23,7 @@ export const deleteNote = async (noteId) => {
  * @param {string} noteId - The unique ID of the note to update.
  * @returns {Promise<void>} - A promise that resolves when the note is updated.
  */
-export const editNote = async (noteData, noteId) => {
+export const UpdateNote = async (noteData, noteId) => {
   const noteRef = ref(db, `notes/${auth.currentUser.uid}/${noteId}`);
   try {
     await set(noteRef, noteData);
@@ -39,7 +39,7 @@ export const editNote = async (noteData, noteId) => {
  * @param {boolean} isStarred - Whether the note should be starred or not.
  * @returns {Promise<void>} - A promise that resolves when the note is updated.
  */
-export const toggleStar = async (noteId, isStarred) => {
+export const ToggleStar = async (noteId, isStarred) => {
   const noteStarRef = ref(db, `notes/${auth.currentUser.uid}/${noteId}/isStarred`);
   try {
     await set(noteStarRef, isStarred);

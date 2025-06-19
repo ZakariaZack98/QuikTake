@@ -1,12 +1,21 @@
 import React, { useState } from "react";
 import { FaPen, FaStar, FaTrash } from "react-icons/fa6";
 import NotePopUp from "./NotePopUp";
+import { toast } from "react-toastify";
+import { DeleteNote } from "../../utils/actions.utils";
 
 const NoteThumbCard = ({ noteData }) => {
   const { id, date, title, bgColor, isStarred } = noteData;
   const [showNote, setShowNote] = useState(false);
 
-  const handleNotePopUp = () => {};
+  const handleDelete = async (e) => {
+    e.stopPropagation();
+    try {
+      await DeleteNote(id);
+    } catch (error) {
+      toast.error('Error deleting note')
+    }
+  }
 
   return (
     <>
@@ -44,7 +53,7 @@ const NoteThumbCard = ({ noteData }) => {
               </span>
             </div>
             <div className="w-8 h-8 rounded-full bg-red-500 flex justify-center items-center">
-              <span className="text-lg text-white">
+              <span className="text-lg text-white" onClick={e => handleDelete(e)}>
                 <FaTrash />
               </span>
             </div>

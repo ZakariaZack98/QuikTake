@@ -1,10 +1,30 @@
-import React, { useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import _ from '../../lib/lib'
 import NotePopUp from './NotePopUp';
+import { NotesDataContext } from '../../Contexts/NoteDataContext';
+import { auth, db } from '../../../Database/firebase.config';
+import { onValue, ref } from 'firebase/database';
+import { toast } from 'react-toastify';
 
 const Sidebar = () => {
   const [showAddNotePrompt, setShowAddNotePrompt] = useState(false);
+  const {notesData, setNotesData} = useContext(NotesDataContext);
   const sidebarData = _.sidebarOpts;
+
+  useEffect(() => {
+    const notesRef = ref(db, `notes/${auth.currentUser.uid}`);
+    const unsub = onValue(notesRef, noteSnapshots => {
+      const updatedNotesData = [];
+      if(noteSnapshots.exists()) {
+        noteSnapshots.forEach(singleNoteSnap => {
+          updatedNotesData.push(singleNoteSnap.val())
+        })
+        setNotesData(updatedNotesData.sort((a, b) => b.timeStamp - a.timeStamp));
+      } else toast.error('No notes found');
+    })
+    return () => unsub();
+  }, [notesData])
+
   return (
     <>
       {showAddNotePrompt && <NotePopUp onNoteClose={setShowAddNotePrompt}/>}
