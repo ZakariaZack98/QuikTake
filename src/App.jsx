@@ -6,21 +6,24 @@ import { ImageUploader } from "./components/misc/ImageUploader";
 import CommonLayout from "./components/CommonLayout";
 import Home from "./pages/Home/Index";
 import { NotesDataProvider } from "./Contexts/NoteDataContext";
+import AuthLoader from './contexts/AuthLoader';
 
 const App = () => {
   return (
-    <NotesDataProvider>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<CommonLayout />}>
-            <Route index element={<Home />} />
-          </Route>
-          <Route path="/signup" element={<SignUp />} />
-          <Route path="/signin" element={<SignIn />} />
-          <Route path="/upload" element={<ImageUploader />} />
-        </Routes>
-      </BrowserRouter>
-    </NotesDataProvider>
+    <AuthLoader>
+      <NotesDataProvider>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<CommonLayout />}>
+              <Route index element={<Home />} />
+            </Route>
+            <Route path="/signup" element={<SignUp />} />
+            <Route path="/signin" element={<SignIn />} />
+            <Route path="/upload" element={<ImageUploader />} />
+          </Routes>
+        </BrowserRouter>
+      </NotesDataProvider>
+    </AuthLoader>
   );
 };
 

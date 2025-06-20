@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import { FaPen, FaStar, FaTrash } from "react-icons/fa6";
 import NotePopUp from "./NotePopUp";
-import { toast } from "react-toastify";
 import { DeleteNote, ToggleStar } from "../../utils/actions.utils";
 
 const NoteThumbCard = ({ noteData }) => {
   const { id, date, title, bgColor, isStarred } = noteData;
   const [showNote, setShowNote] = useState(false);
+  
 
 
   const handleDelete = async (e) => {

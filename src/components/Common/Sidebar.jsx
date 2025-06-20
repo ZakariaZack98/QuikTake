@@ -5,14 +5,17 @@ import { NotesDataContext } from '../../Contexts/NoteDataContext';
 import { auth, db } from '../../../Database/firebase.config';
 import { onValue, ref } from 'firebase/database';
 import { toast } from 'react-toastify';
+import { useAuthUser } from '../../contexts/AuthUserContext';
 
 const Sidebar = () => {
   const [showAddNotePrompt, setShowAddNotePrompt] = useState(false);
   const {notesData, setNotesData} = useContext(NotesDataContext);
   const sidebarData = _.sidebarOpts;
+  const user = useAuthUser();
 
   useEffect(() => {
-    const notesRef = ref(db, `notes/${auth.currentUser.uid}`);
+    if (!user) return;
+    const notesRef = ref(db, `notes/${user.uid}`);
     const unsub = onValue(notesRef, noteSnapshots => {
       const updatedNotesData = [];
       if(noteSnapshots.exists()) {
@@ -23,11 +26,11 @@ const Sidebar = () => {
       } else toast.error('No notes found');
     })
     return () => unsub();
-  }, [notesData])
+  }, [user, setNotesData])
 
   return (
     <>
-      {showAddNotePrompt && <NotePopUp onNoteClose={setShowAddNotePrompt}/>}
+      {showAddNotePrompt && <NotePopUp onNoteClose={setShowAddNotePrompt}/>} 
       <div className='px-3 py-6 border-e-1 border-gray-300 dark:border-gray-600 h-full font-poppins bg-white dark:bg-gray-800'>
       <p className="font-medium text-gray-700 dark:text-white">QuikTake</p>
       <div className="sidebarOpts flex flex-col items-center gap-y-5 mt-5">
@@ -41,7 +44,7 @@ const Sidebar = () => {
           ))
         }
       </div>
-    </div>
+      </div>
     </>
   )
 }

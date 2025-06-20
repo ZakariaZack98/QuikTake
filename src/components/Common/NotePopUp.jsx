@@ -67,7 +67,7 @@ const NotePopUp = ({ noteData, onNoteClose, onToggleStar }) => {
    */
   const handleSaveAndClose = async () => {
     if(title.length === 0 || desc.length === 0) {
-      toast.error('Title/desc should not be empty');
+      onNoteClose(false);
       return;
     }
     onNoteClose(false);
