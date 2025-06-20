@@ -1,11 +1,11 @@
 import React, { useContext, useEffect, useState } from 'react'
 import _ from '../../lib/lib'
 import NotePopUp from './NotePopUp';
-import { NotesDataContext } from '../../Contexts/NoteDataContext';
+import { NotesDataContext } from '../../contexts/NoteDataContext';
 import { auth, db } from '../../../Database/firebase.config';
 import { onValue, ref } from 'firebase/database';
 import { toast } from 'react-toastify';
-import { useAuthUser } from '../../contexts/AuthUserContext';
+import { useAuthUser } from '../../contexts/AuthLoader';
 
 const Sidebar = () => {
   const [showAddNotePrompt, setShowAddNotePrompt] = useState(false);

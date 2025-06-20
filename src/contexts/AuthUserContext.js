@@ -1,7 +1,1 @@
-import { createContext, useContext } from 'react';
-
-export const AuthUserContext = createContext(null);
-
-export function useAuthUser() {
-  return useContext(AuthUserContext);
-}
+// This file has been merged into AuthLoader.jsx. Please use AuthLoader.jsx for AuthUserContext and useAuthUser.

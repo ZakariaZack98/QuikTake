@@ -1,26 +1,29 @@
-import React from "react";
+import React, { lazy, Suspense } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import SignUp from "./pages/SignUp/SignUp";
-import SignIn from "./pages/SignIn/SignIn";
-import { ImageUploader } from "./components/misc/ImageUploader";
-import CommonLayout from "./components/CommonLayout";
-import Home from "./pages/Home/Index";
-import { NotesDataProvider } from "./Contexts/NoteDataContext";
+import { NotesDataProvider } from "./contexts/NoteDataContext";
 import AuthLoader from './contexts/AuthLoader';
+import Spinner from "./components/Common/Spinner";
+const SignUp = lazy(() => import("./pages/SignUp/SignUp"));
+const SignIn = lazy(() => import("./pages/SignIn/SignIn"));
+const ImageUploader = lazy(() => import("./components/misc/ImageUploader"));
+const CommonLayout = lazy(() => import("./components/CommonLayout"));
+const Home = lazy(() => import("./pages/Home/Index"));
 
 const App = () => {
   return (
     <AuthLoader>
       <NotesDataProvider>
         <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<CommonLayout />}>
-              <Route index element={<Home />} />
-            </Route>
-            <Route path="/signup" element={<SignUp />} />
-            <Route path="/signin" element={<SignIn />} />
-            <Route path="/upload" element={<ImageUploader />} />
-          </Routes>
+          <Suspense fallback={<Spinner />}>
+            <Routes>
+              <Route path="/" element={<CommonLayout />}>
+                <Route index element={<Home />} />
+              </Route>
+              <Route path="/signup" element={<SignUp />} />
+              <Route path="/signin" element={<SignIn />} />
+              <Route path="/upload" element={<ImageUploader />} />
+            </Routes>
+          </Suspense>
         </BrowserRouter>
       </NotesDataProvider>
     </AuthLoader>

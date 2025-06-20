@@ -2,7 +2,7 @@ import React, { useContext } from 'react'
 import SearchBox from '../../components/Home/Search'
 import _ from '../../lib/lib'
 import NoteThumbCard from '../../components/Common/NoteThumbCard';
-import { NotesDataContext } from '../../Contexts/NoteDataContext';
+import { NotesDataContext } from '../../contexts/NoteDataContext';
 
 const Home = () => {
   const {notesData} = useContext(NotesDataContext);

@@ -1,16 +1,19 @@
-import { useEffect, useState } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from '../../Database/firebase.config';
-import { AuthUserContext } from './AuthUserContext';
+
+const AuthUserContext = createContext(null);
+
+export function useAuthUser() {
+  return useContext(AuthUserContext);
+}
 
 export default function AuthLoader({ children }) {
-  const [loading, setLoading] = useState(true);
   const [user, setUser] = useState(null);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
       setUser(firebaseUser);
-      setLoading(false);
     });
     return unsubscribe;
   }, []);
