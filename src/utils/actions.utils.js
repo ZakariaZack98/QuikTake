@@ -27,7 +27,6 @@ export const UpdateNote = async (noteData, noteId) => {
   const noteRef = ref(db, `notes/${auth.currentUser.uid}/${noteId}`);
   try {
     await set(noteRef, noteData);
-    toast.success('Note updated.')
   } catch (error) {
     toast.error(`Error editing note: ${error.message}`);
   }

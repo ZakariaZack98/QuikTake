@@ -2,24 +2,26 @@ import React, { useState } from "react";
 import { FaPen, FaStar, FaTrash } from "react-icons/fa6";
 import NotePopUp from "./NotePopUp";
 import { toast } from "react-toastify";
-import { DeleteNote } from "../../utils/actions.utils";
+import { DeleteNote, ToggleStar } from "../../utils/actions.utils";
 
 const NoteThumbCard = ({ noteData }) => {
   const { id, date, title, bgColor, isStarred } = noteData;
   const [showNote, setShowNote] = useState(false);
 
+
   const handleDelete = async (e) => {
     e.stopPropagation();
-    try {
-      await DeleteNote(id);
-    } catch (error) {
-      toast.error('Error deleting note')
-    }
+    await DeleteNote(id);
+  }
+
+  const handleStar = async e => {
+    e.stopPropagation();
+    await ToggleStar(id, !isStarred);
   }
 
   return (
     <>
-      {showNote && <NotePopUp noteData={noteData} onNoteClose={setShowNote}/>}
+      {showNote && <NotePopUp noteData={noteData} onNoteClose={setShowNote} onToggleStar={handleStar}/>}
       <div
         className={`max-w-1/5 flex flex-col justify-between aspect-square rounded-3xl ${bgColor} p-3 cursor-pointer duration-200 hover:scale-105 text-white`}
         onClick={() => setShowNote(true)}>
@@ -27,17 +29,10 @@ const NoteThumbCard = ({ noteData }) => {
           <p className="text-lg" style={{ position: "relative", margin: 0 }}>
             <span className="starred" style={{ float: "right", display: "inline-block", marginLeft: "8px" }}>
               <span
-                className="text-lg"
-                style={{
-                  background: `${isStarred ? "#fcc43e" : "black"}`,
-                  borderRadius: "9999px",
-                  width: "2.5rem",
-                  height: "2.5rem",
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  color: "white",
-                }}>
+                className="text-lg cursor-pointer rounded-full w-10 h-10 flex justify-center items-center text-white"
+                style={{background: `${isStarred ? "#fcc43e" : "black"}`}}
+                onClick={e => handleStar(e)}
+                >
                 <FaStar />
               </span>
             </span>

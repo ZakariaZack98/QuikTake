@@ -13,7 +13,7 @@ const Home = () => {
       <div className="notesGrid flex flex-wrap gap-4 items-start">
         {
           notesData?.map(note => (
-            <NoteThumbCard key={note.date} noteData={note}/>
+            <NoteThumbCard key={note.id} noteData={note}/>
           ))
         }
       </div>

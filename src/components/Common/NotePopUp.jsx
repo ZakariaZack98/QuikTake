@@ -8,7 +8,7 @@ import { toast } from "react-toastify";
 import { UpdateNote } from "../../utils/actions.utils";
 import { auth } from "../../../Database/firebase.config";
 
-const NotePopUp = ({ noteData, onNoteClose }) => {
+const NotePopUp = ({ noteData, onNoteClose, onToggleStar }) => {
   const newNoteData = {
     id: auth.currentUser?.uid + Date.now(),
     timeStamp: Date.now(),
@@ -33,16 +33,26 @@ const NotePopUp = ({ noteData, onNoteClose }) => {
     setUpdatedNoteData({ ...updatedNoteData, desc });
   };
 
+  const handleStar = e => {
+    setUpdatedNoteData({...updatedNoteData, isStarred: !isStarred});
+    onToggleStar(e);
+  }
+
   const openUploadPrompt = () => {
     fileInputRef.current?.click();
   };
 
+  /**
+   * Handles the file input's change event by uploading the selected files to Cloudinary
+   * and updating the note's photoUrls state with the secure URLs returned from Cloudinary.
+   * If the note already has photos, appends the newly uploaded photos to the existing array.
+   * @param {Event} event - The file input's change event.
+   * @returns {Promise<void>} - A promise that resolves when the file upload is complete.
+   */
   const handleFileChange = async (event) => {
     const files = event.target.files;
     if (files) {
-      console.log("Selected file:", files);
       const secureUrls = await uploadFilesToCloudinary(files);
-      console.log("secure urls: ", secureUrls);
       let updatedPhotoUrls;
       if(photoUrls && photoUrls.length > 0) {
         updatedPhotoUrls = photoUrls.concat(secureUrls);
@@ -51,6 +61,10 @@ const NotePopUp = ({ noteData, onNoteClose }) => {
     }
   };
 
+  /**
+   * Closes the note pop-up and updates the note in the Realtime Database.
+   * If the title or description are empty, shows an error toast and does nothing.
+   */
   const handleSaveAndClose = async () => {
     if(title.length === 0 || desc.length === 0) {
       toast.error('Title/desc should not be empty');
@@ -85,17 +99,10 @@ const NotePopUp = ({ noteData, onNoteClose }) => {
             ))}
           </div>
           <span
-            className="text-lg"
-            style={{
-              background: `${isStarred ? "#fcc43e" : "black"}`,
-              borderRadius: "9999px",
-              width: "2.5rem",
-              height: "2.5rem",
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              color: "white",
-            }}>
+            className="text-lg cursor-pointer rounded-full w-10 h-10 flex justify-center items-center text-white"
+            style={{ background: `${isStarred ? "#fcc43e" : "black"}`,}}
+            onClick={e => handleStar(e)}
+            >
             <FaStar />
           </span>
         </div>
